@@ -11,14 +11,21 @@ app.use(express.json());
 
 // get our restrunats
 app.get('/api/v1/restaurants', async (req, res) =>{
-    const results = await db.query("select * from restraunts ")
-    console.log(results);
-    res.status(200).json({
-        status: "success",
-        data:{
-            restraunt :["mac", "starbucks", "dominos"]
-        }
-    });
+
+    try {
+        const results = await db.query("select * from restraunts ")
+        console.log(results);
+        res.status(200).json({
+            status: "success",
+            results:results.rows.length,
+            data:{
+                restraunt: results.rows,
+            }
+        });
+        
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 
