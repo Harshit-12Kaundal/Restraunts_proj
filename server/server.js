@@ -31,26 +31,37 @@ app.get('/api/v1/restaurants', async (req, res) =>{
 
 // get a restraunt
 
-app.get('/api/v1/restaurants/:id', (req, res)=>{
-    console.log(req.body);
-    res.status(200).json({
-        status : "success",
-        data:{
-            restraunt: "Kfc"
-        }
-    });
+app.get('/api/v1/restaurants/:id', async(req, res)=>{
+    try {
+        const results = await db.query("select  from restraunts where id= $1" ,[req.params.id]);
+        console.log(results.rows[0]);
+        res.status(200).json({
+            status : "success",
+            data:{
+                restraunt: results.rows[0],
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 //  createa a restaurant 
 
-app.post('/api/v1/restaurants' ,(req, res)=>{
+app.post('/api/v1/restaurants' ,async(req, res)=>{
     console.log(req.body);
-    res.status(201).json({
-        status : "success",
-        data:{
-            restraunt: "Kfc"
-        }
-    });
+    try {
+        const results = await db.query("INSERT INTO restraunts (name , location ,price_range) values ($1, $2, $3) returning *" ,[req.body.name , req.body.location , req.body.price_range] );
+        console.log(results);
+        res.status(201).json({
+            status : "success",
+            data:{
+                restraunt: results.rows[0],
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 
