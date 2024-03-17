@@ -14,7 +14,6 @@ app.get('/api/v1/restaurants', async (req, res) =>{
 
     try {
         const results = await db.query("select * from restraunts ")
-        console.log(results);
         res.status(200).json({
             status: "success",
             results:results.rows.length,
@@ -34,7 +33,6 @@ app.get('/api/v1/restaurants', async (req, res) =>{
 app.get('/api/v1/restaurants/:id', async(req, res)=>{
     try {
         const results = await db.query("select  from restraunts where id= $1" ,[req.params.id]);
-        console.log(results.rows[0]);
         res.status(200).json({
             status : "success",
             data:{
@@ -52,7 +50,6 @@ app.post('/api/v1/restaurants' ,async(req, res)=>{
     console.log(req.body);
     try {
         const results = await db.query("INSERT INTO restraunts (name , location ,price_range) values ($1, $2, $3) returning *" ,[req.body.name , req.body.location , req.body.price_range] );
-        console.log(results);
         res.status(201).json({
             status : "success",
             data:{
@@ -66,21 +63,33 @@ app.post('/api/v1/restaurants' ,async(req, res)=>{
 
 
 //update a restaurant
-app.put("/api/v1/restaurants/:id", (req, res)=>{
+app.put("/api/v1/restaurants/:id", async(req, res)=>{
+
+    try {
+        const results =await db.query("UPDATE restraunts SET name =$1 , location =$2 , price_range =$3 where id =$4 returning *" ,[req.body.name ,req.body.location ,req.body.price_range ,req.params.id]);
+        res.status(200).json({
+            status : "success",
+            data:{
+                restraunt: results.rows[0],
+            }
+        });
+        
+    } catch (error) {
+        console.log(error);
+    }
     console.log(req.params.id);
     console.log(req.body);
-    res.status(200).json({
-        status : "success",
-        data:{
-            restraunt: "Kfc"
-        }
-    });
 });
 
-app.delete("/api/v1/restaurants/:id", (req,res) =>{
-    res.status(204).json({
-        status: "success",
-    });
+app.delete("/api/v1/restaurants/:id", async (req,res) =>{
+    try {
+        const results =await db.query("DELETE FROM restraunts WHERE id= $1", [req.params.id]);
+        res.status(204).json({
+            status: "success",
+        });
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 app.listen(port , () =>{
