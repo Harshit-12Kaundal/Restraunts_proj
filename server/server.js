@@ -33,11 +33,13 @@ app.get('/api/v1/restaurants', async (req, res) =>{
 
 app.get('/api/v1/restaurants/:id', async(req, res)=>{
     try {
-        const results = await db.query("SELECT * FROM restraunts WHERE id= $1" ,[req.params.id]);
+        const restaurants = await db.query("SELECT * FROM restraunts WHERE id= $1" ,[req.params.id]);
+        const reviews = await db.query("SELECT * FROM review WHERE restaurant_id= $1" ,[req.params.id]);
         res.status(200).json({
             status : "success",
             data:{
-                restraunt: results.rows[0],
+                restraunt: restaurants.rows[0],
+                reviews: reviews.rows
             }
         });
         console.log(results.rows[0]);
@@ -93,6 +95,7 @@ app.delete("/api/v1/restaurants/:id", async (req,res) =>{
         console.log(error);
     }
 });
+
 
 app.listen(port , () =>{
     console.log(`listening on port ${port}`);
