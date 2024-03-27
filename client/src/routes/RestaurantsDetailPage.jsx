@@ -26,7 +26,7 @@ const RestaurantsPage = () => {
     <div>
       { selectedrestaurants && (
       <>
-      <h1></h1>
+      <h1 className='text-center display-1'>{selectedrestaurants.restraunt.name}</h1>
         <div className="mt-3">
           <Reviews reviews={selectedrestaurants.reviews}/>
         </div>
