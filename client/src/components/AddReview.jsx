@@ -1,22 +1,29 @@
 import React, { useState } from 'react'
 import RestrauntsFinder from '../apis/RestrauntsFinder';
 import { useParams } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 
 const AddReview = () => {
     const {id} =useParams();
-    console.log(id);
+    const location =useLocation();
+    const navigate =useNavigate();
     const [name,setName]=useState("");
     const [reviewTest,setReviewTest]=useState("");
     const [rating,setRating]=useState("Rating");
 
     const handleSubmitReview = async(e) =>{
-        e.preventDefault();
-        const newReview = await RestrauntsFinder.post(`/${id}/addReview`,{
-            name ,
-            review:reviewTest,
-            rating,
-        });
-        console.log(newReview);
+        // e.preventDefault();
+        try {
+            const newReview = await RestrauntsFinder.post(`/${id}/addReview`,{
+                name ,
+                review:reviewTest,
+                rating,
+            });
+            navigate("/")
+            navigate(location.pathname)
+        } catch (error) {
+
+        }
     }
 
   return (
