@@ -1,9 +1,23 @@
 import React, { useState } from 'react'
+import RestrauntsFinder from '../apis/RestrauntsFinder';
+import { useParams } from 'react-router-dom';
 
 const AddReview = () => {
+    const {id} =useParams();
+    console.log(id);
     const [name,setName]=useState("");
     const [reviewTest,setReviewTest]=useState("");
     const [rating,setRating]=useState("Rating");
+
+    const handleSubmitReview = async(e) =>{
+        e.preventDefault();
+        const newReview = await RestrauntsFinder.post(`/${id}/addReview`,{
+            name ,
+            review:reviewTest,
+            rating,
+        });
+        console.log(newReview);
+    }
 
   return (
     <div className='mb-2'>
@@ -29,7 +43,7 @@ const AddReview = () => {
                 <label htmlFor='Review'>Review</label>
                 <textarea value={reviewTest} onChange={(e)=> setReviewTest(e.target.value)} id="Review" className='form-control'></textarea>
             </div>
-            <button className="btn btn-primary">submit</button>
+            <button type="submit" onClick={handleSubmitReview} className="btn btn-primary">submit</button>
         </form>
 
     </div>
