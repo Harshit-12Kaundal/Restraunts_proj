@@ -14,12 +14,14 @@ app.use(express.json());
 app.get('/api/v1/restaurants', async (req, res) =>{
 
     try {
-        const results = await db.query("select * from restraunts ")
+        const results = await db.query("select * from restraunts ");
+        const restarantRatingData = await db.query("select * from restraunts left join (select restaurant_id, COUNT(*) ,TRUNC(AVG(rating),1) as average_rating from review group by restaurant_id) review on restraunts.id = review.restaurant_id ;"
+        );
         res.status(200).json({
             status: "success",
-            results:results.rows.length,
+            results:restarantRatingData.rows.length,
             data:{
-                restraunt: results.rows,
+                restraunt: restarantRatingData.rows,
             }
         });
         
@@ -33,7 +35,7 @@ app.get('/api/v1/restaurants', async (req, res) =>{
 
 app.get('/api/v1/restaurants/:id', async(req, res)=>{
     try {
-        const restaurants = await db.query("SELECT * FROM restraunts WHERE id= $1" ,[req.params.id]);
+        const restaurants = await db.query("select * from restraunts left join (select restaurant_id, COUNT(*) ,TRUNC(AVG(rating),1) as average_rating from review group by restaurant_id) review on restraunts.id = review.restaurant_id where id=$1" ,[req.params.id]);
         const reviews = await db.query("SELECT * FROM review WHERE restaurant_id= $1" ,[req.params.id]);
         res.status(200).json({
             status : "success",
