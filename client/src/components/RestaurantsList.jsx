@@ -28,7 +28,7 @@ const RestaurantsList = (props) => {
             setRestaurants(restaurants.filter(restaurant =>{
                 return restaurant.id !== id;
             }))
-            // console.log(response);
+            console.log(response);
         } catch (error) {
             console.log(error);
         }
@@ -46,7 +46,7 @@ const RestaurantsList = (props) => {
     const RenderRating =()=>{
         return(
             <>
-            <StarRating rating ={restraunt.id}/>
+            <StarRating rating ={restaurants.id}/>
             <span className="text-warning ml-1">{restraunt.count}</span>
             </>
         )
