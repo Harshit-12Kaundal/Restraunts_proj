@@ -5,6 +5,7 @@ import RestrauntsFinder from '../apis/RestrauntsFinder';
 // import StarRating from '../components/StarRating';
 import Reviews from '../components/Reviews';
 import AddReview from '../components/AddReview';
+import StarRating from '../components/StarRating';
 
 const RestaurantsPage = () => {
   const  {id} =useParams();
@@ -27,6 +28,12 @@ const RestaurantsPage = () => {
       { selectedrestaurants && (
       <>
       <h1 className='text-center display-1'>{selectedrestaurants.restraunt.name}</h1>
+      <div className="text-center">
+        <StarRating rating={selectedrestaurants.restraunt.average_rating}/>
+          <span className='text-warning ml-1'>
+            {selectedrestaurants.restraunt.count ? `(${selectedrestaurants.restraunt.count})`:"(0)"}
+          </span>
+      </div>
         <div className="mt-3">
           <Reviews reviews={selectedrestaurants.reviews}/>
         </div>

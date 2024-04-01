@@ -43,11 +43,14 @@ const RestaurantsList = (props) => {
         navigate(`/restaurants/${id}`);
     }
 
-    const RenderRating =()=>{
+    const RenderRating =(restaurant)=>{
+        if(!restaurant.count){
+            return <span className="text-warning">0 Reviews</span>
+        }
         return(
             <>
-            <StarRating rating ={restaurants.id}/>
-            <span className="text-warning ml-1">{restraunt.count}</span>
+            <StarRating rating ={restaurant.id}/>
+            <span className="text-warning ml-1">({restaurant.count})</span>
             </>
         )
     }
